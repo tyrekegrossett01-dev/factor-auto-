@@ -1,0 +1,96 @@
+
+# helpers.py
+# Reusable helper functions for the Factory Automation Management System.
+
+
+def get_text(prompt):
+    """Keep asking until the user types something that is not blank."""
+    while True:
+        value = input(prompt).strip()
+        if value != "":
+            return value
+        print("This cannot be blank. Please try again.")
+
+
+def get_positive_int(prompt):
+    """Keep asking until the user enters a whole number above zero."""
+    while True:
+        text = input(prompt).strip()
+        if text.isdigit() and int(text) > 0:
+            return int(text)
+        print("Enter a whole number greater than 0.")
+
+
+def get_non_negative_number(prompt):
+    """Keep asking until the user enters a number that is 0 or more."""
+    while True:
+        try:
+            value = float(input(prompt).strip())
+            if value >= 0:
+                return value
+        except ValueError:
+            pass
+        print("Enter a number that is 0 or more.")
+
+
+def choose_from(prompt, choices):
+    """Show numbered choices from a tuple and return the one picked."""
+    while True:
+        for number, item in enumerate(choices, start=1):
+            print(number, "-", item)
+
+        pick = input(prompt).strip()
+
+        if pick.isdigit() and 1 <= int(pick) <= len(choices):
+            return choices[int(pick) - 1]
+
+        print("Invalid choice.")
+
+
+def generate_id(prefix, dictionary):
+    """Create the next ID, such as M001, M002 and so on."""
+    return prefix + str(len(dictionary) + 1).zfill(3)
+
+
+def calculate_estimated_cost(
+    time_per_unit, quantity, cost_per_hour, material_cost
+):
+    """Return the estimated production cost using the agreed formula."""
+    machine_hours = time_per_unit * quantity / 60
+    return machine_hours * cost_per_hour + material_cost * quantity
+
+
+def get_non_negative_int(prompt):
+    """Keep asking until the user enters a whole number that is 0 or more."""
+    while True:
+        text = input(prompt).strip()
+        if text.isdigit():
+            return int(text)
+        print("Enter a whole number that is 0 or more.")
+
+
+def get_existing_id(prompt, dictionary, label):
+    """Ask for an ID until it exists, or return None if the user types 0."""
+    while True:
+        record_id = input(prompt + " (0 to cancel): ").strip().upper()
+
+        if record_id == "0":
+            return None
+
+        if record_id in dictionary:
+            return record_id
+
+        print(label, "not found. Try again.")
+
+
+def get_yes_no(prompt):
+    """Ask a Y/N question. Return True for Y and False for N."""
+    while True:
+        answer = input(prompt + " (Y/N): ").strip().upper()
+
+        if answer == "Y":
+            return True
+        if answer == "N":
+            return False
+
+        print("Please type Y or N.")
